@@ -1,14 +1,15 @@
-import mongoose from "mongoose"
-//mongoose.Promise = global.Promise ;
+import mongoose from "mongoose";
+const { MONGO_URI } = process.env;
 
-const db=`mongodb+srv://dilipwannigamage:btFVeAwj0ImW4LkC@spotiviraldb.rkamkht.mongodb.net/?retryWrites=true&w=majority`
-
-export const connection=async()=>{ return await mongoose.connect(db).then(() => {
-      console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-      console.error('Error connecting to MongoDB:', err.message);
+export const connectToMongoDB = async () => {
+  try {
+    await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-}
-
-//module.exports=connection;
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error.message);
+    process.exit(1);
+  }
+};

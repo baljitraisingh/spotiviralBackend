@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import  {emailsender} from './Utility/MailSend.js'
@@ -5,8 +6,9 @@ import {apiRoute} from './Router/PaymentRoutes.js'
 import {TeamMessage} from './Utility/TeamMessage.js'
 import {ClientMessage} from './Utility/ClientMessage.js'
 import { FreePromoMessage } from './Utility/FreePromoMessage.js'
-import {connection} from "./Models/db.js"
+import {connectToMongoDB} from "./Models/db.js"
 import { getUser,deleteUser } from './Controller/User.js'
+// import { connection } from "./Models/db.js"
 const app = express();
 app.use(express.json());
 // Enable CORS for all routes
@@ -85,7 +87,11 @@ app.post('/freepromotion', async (req, res) => {
  })
 // Start the server
 const PORT = process.env.PORT || 4000;
-app.listen(PORT,async () => {
-  await connection()
-  console.log(`Server is running on port ${PORT}`);
+connectToMongoDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}).catch(error => {
+  console.error('Failed to connect to MongoDB:', error);
+  process.exit(1);
 });

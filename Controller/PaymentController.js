@@ -2,7 +2,7 @@ const STRIPE_PUBLISHABLE_KEY =
   "pk_live_51IpqnXEhDFzZqzWxhGO9vlehG0gUfdXnK188GsI9OlnI0ugDTo04yAqjOSayV69cEUpiYMNpIyFlL8QxXzJi6vZq00GGtlpWhJ";
 const STRIPE_SECRET_KEY =
   "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";
-
+  const { MONGO_URI } = process.env;
 import stripePackage from "stripe";
 const stripe = stripePackage(STRIPE_SECRET_KEY);
 import { emailsender } from "../Utility/MailSend.js";
@@ -38,8 +38,8 @@ const payment = async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: "http://localhost:3000/sucess",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: `${MONGO_URI}/sucess`,
+      cancel_url: `${MONGO_URI}/cancel`,
     });
     req.body.strip_id = session.id;
     await createUser(req.body);
