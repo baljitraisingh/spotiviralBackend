@@ -38,8 +38,8 @@ const payment = async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `${MONGO_URI}/sucess`,
-      cancel_url: `${MONGO_URI}/cancel`,
+      success_url: "http://localhost:3000/sucess",
+      cancel_url: "http://localhost:3000/cancel",
     });
     req.body.strip_id = session.id;
     await createUser(req.body);
